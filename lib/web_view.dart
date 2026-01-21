@@ -45,7 +45,7 @@ class _ReCaptchaWebViewState extends State<ReCaptchaWebView> {
       });
 
     _webController.loadRequest(Uri.parse(widget.url)).then(
-        (value) => Future.delayed(const Duration(seconds: 3)).then((value) {
+        (value) => Future.delayed(Durations.medium2).then((value) {
               _initializeReadyJs(_webController);
             }));
   }
