@@ -13,7 +13,6 @@ class RecaptchaHandler {
   late WebViewController controller;
   late String _siteKey;
 
-
   String? _captchaToken;
 
   String get siteKey => _siteKey;
@@ -28,14 +27,14 @@ class RecaptchaHandler {
     _instance?.controller = controller;
 
     await controller.runJavaScript(
-        '${AppConstants.readyCaptcha}("${_instance?._siteKey}", "submit")');
+      '${AppConstants.readyCaptcha}("${_instance?._siteKey}", "submit")',
+    );
   }
 
-  void updateToken({required String generatedToken}){
-    _captchaToken=generatedToken;
+  void updateToken({required String generatedToken}) {
+    _captchaToken = generatedToken;
   }
 
-  /// setups the data site key
   String? setupSiteKey({required String dataSiteKey}) =>
       _instance?._siteKey = dataSiteKey;
 
@@ -43,7 +42,7 @@ class RecaptchaHandler {
   static Future<void> executeV3({String? action}) async {
     final String userAction = action ?? 'submit';
     await _instance?.controller.runJavaScript(
-        '${AppConstants.executeCaptcha}("${_instance?._siteKey}", "$userAction")');
+      '${AppConstants.executeCaptcha}("${_instance?._siteKey}", "$userAction")',
+    );
   }
-
 }

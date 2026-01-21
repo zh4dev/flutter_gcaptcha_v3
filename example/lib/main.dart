@@ -62,9 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ignoring: true,
                   child: ReCaptchaWebView(
                     width: double.maxFinite,
-                    height: 200,
                     onTokenReceived: _onTokenReceived,
-                    url: 'https://emerald-eran-52.tiiny.site',
+                    height: 200,
                   ),
                 ),
               ],

@@ -4,19 +4,17 @@ import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ReCaptchaWebView extends StatefulWidget {
-  const ReCaptchaWebView(
-      {Key? key,
-      required this.url,
-      required this.width,
-      required this.height,
-      required this.onTokenReceived,
-      this.webViewColor = Colors.transparent})
-      : super(key: key);
+  const ReCaptchaWebView({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.onTokenReceived,
+    this.webViewColor = Colors.transparent,
+  }) : super(key: key);
 
   final double width, height;
   final Function(String token) onTokenReceived;
   final Color? webViewColor;
-  final String url;
 
   @override
   State<ReCaptchaWebView> createState() => _ReCaptchaWebViewState();
@@ -36,18 +34,27 @@ class _ReCaptchaWebViewState extends State<ReCaptchaWebView> {
     _webController
       ..setBackgroundColor(widget.webViewColor ?? Colors.transparent)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel(AppConstants.readyJsName,
-          onMessageReceived: (JavaScriptMessage message) {})
-      ..addJavaScriptChannel(AppConstants.captchaJsName,
-          onMessageReceived: (JavaScriptMessage message) {
-        widget.onTokenReceived(message.message);
-        RecaptchaHandler.instance.updateToken(generatedToken: message.message);
-      });
+      ..addJavaScriptChannel(
+        AppConstants.readyJsName,
+        onMessageReceived: (JavaScriptMessage message) {},
+      )
+      ..addJavaScriptChannel(
+        AppConstants.captchaJsName,
+        onMessageReceived: (JavaScriptMessage message) {
+          widget.onTokenReceived(message.message);
+          RecaptchaHandler.instance.updateToken(
+            generatedToken: message.message,
+          );
+        },
+      );
 
-    _webController.loadRequest(Uri.parse(widget.url)).then(
-        (value) => Future.delayed(const Duration(seconds: 3)).then((value) {
-              _initializeReadyJs(_webController);
-            }));
+    _webController
+        .loadFlutterAsset(AppConstants.webPage)
+        .then(
+          (value) => Future.delayed(const Duration(seconds: 3)).then((value) {
+            _initializeReadyJs(_webController);
+          }),
+        );
   }
 
   @override
@@ -55,9 +62,7 @@ class _ReCaptchaWebViewState extends State<ReCaptchaWebView> {
     return SizedBox(
       height: widget.height,
       width: widget.width,
-      child: WebViewWidget(
-        controller: _webController,
-      ),
+      child: WebViewWidget(controller: _webController),
     );
   }
 
