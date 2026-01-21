@@ -32,7 +32,7 @@ class _ReCaptchaWebViewState extends State<ReCaptchaWebView> {
     _setWebViewConfigs();
   }
 
-  _setWebViewConfigs() {
+  void _setWebViewConfigs() {
     _webController
       ..setBackgroundColor(widget.webViewColor ?? Colors.transparent)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)

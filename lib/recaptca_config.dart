@@ -24,10 +24,10 @@ class RecaptchaHandler {
   static RecaptchaHandler get instance => _instance ??= RecaptchaHandler._();
 
   /// updates the Web view controller
-  updateController({required WebViewController controller}) {
+  Future<void> updateController({required WebViewController controller}) async {
     _instance?.controller = controller;
 
-    controller.runJavaScript(
+    await controller.runJavaScript(
         '${AppConstants.readyCaptcha}("${_instance?._siteKey}", "submit")');
   }
 
@@ -36,13 +36,14 @@ class RecaptchaHandler {
   }
 
   /// setups the data site key
-  setupSiteKey({required String dataSiteKey}) =>
+  String? setupSiteKey({required String dataSiteKey}) =>
       _instance?._siteKey = dataSiteKey;
 
   /// Executes and call the  recaptcha API
-  static executeV3({String? action}) {
+  static Future<void> executeV3({String? action}) async {
     final String userAction = action ?? 'submit';
-    _instance?.controller.runJavaScript(
+    await _instance?.controller.runJavaScript(
         '${AppConstants.executeCaptcha}("${_instance?._siteKey}", "$userAction")');
   }
+
 }
